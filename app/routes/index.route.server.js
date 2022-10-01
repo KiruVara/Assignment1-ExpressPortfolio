@@ -1,9 +1,18 @@
-//the router to display functions on the site using Router function and export it so its viewable in router
+//retrieve content via router
 import { Router } from "express";
-import { helloWorld } from "../controllers/index.controller.server.js";
+import { displayAboutPage, 
+    displayContactPage, 
+    displayHomePage, 
+    displayProjectsPage, 
+    displayServicesPage } from "../controllers/index.controller.server.js";
 
 const router = Router();
 
-router.get('/hello', helloWorld);
+router.get('/', displayHomePage);
+router.get('/home', displayHomePage);
+router.get('/about', displayAboutPage);
+router.get('/projects', displayProjectsPage);
+router.get('/services', displayServicesPage);
+router.get('/contact', displayContactPage);
 
-export default router; 
+export default router;

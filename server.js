@@ -1,41 +1,59 @@
-//Connect to server localhost:3000 by pulling from controller and router and load modules
+//to display on server
+import debug from 'debug';
+debug('comp-229');
+import http from 'http';
 
-//3rd party modules 
-import express from 'express';
-import cookieParser from 'cookie-parser'; 
-import logger from 'morgan'; 
-import session from 'express-session'; 
+import app from './app/app.js';
 
-//ES modules fix for __dirname
-import path, { dirname } from 'path'; 
-import { fileURLToPath } from 'url';
-const __dirname = dirname(fileURLToPath(import.meta.url));
+const PORT = normalizePort(process.env.PORT || 3000);
+app.set('port', PORT);
 
-//import routes
-import indexRouter from './app/routes/index.route.server.js'
+const server = http.createServer(app);
 
-//instantiate express app
-const app = express();
+server.listen(PORT);
+server.on('error', onError);
+server.on('listening', onListening);
 
-//set up middleware
+function normalizePort(val) {
+    var port = parseInt(val, 10);
+    if (isNaN(port)) {
+        return val;
+    }
 
-//setup ViewEngine EJS
-app.set('views', path.join(__dirname, '/app/views') );
-app.set('view engine', 'ejs');
+    if (port >= 0) {
+        return port;
+    }
 
-app.use(logger('dev')); 
-app.use(express.json()); 
-app.use(express.urlencoded({extended: false}));
-app.use(cookieParser()); 
-app.use(express.static(path.join(__dirname, '/client'))); 
-app.use(session({
-    secret: 'My Secret', 
-    saveUninitialized: false,
-    resave: false
-}))
+    return false;
+}
 
+function onError(error) {
+    if (error.syscall !== 'listen') {
+        throw error;
+    }
 
-// use Routes
-app.use('/', indexRouter);
+    let bind = typeof port === 'string'
+        ? 'Pipe ' + port
+        : 'Port ' + port;
 
-app.listen(3000);
+    // handle specific listen errors with friendly messages
+    switch (error.code) {
+        case 'EACCES':
+            console.error(bind + ' requires elevated privileges');
+            process.exit(1);
+            break;
+        case 'EADDRINUSE':
+            console.error(bind + ' is already in use');
+            process.exit(1);
+            break;
+        default:
+            throw error;
+    }
+}
+
+function onListening() 
+{
+  let addr = server.address();
+  let bind = 'pipe ' + addr;
+  debug('Listening on ' + bind);
+}

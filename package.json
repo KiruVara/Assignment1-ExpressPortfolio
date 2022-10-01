@@ -1,7 +1,7 @@
 {
-  "name": "comp229-labs",
+  "name": "comp229-f2022-week2",
   "version": "0.0.1",
-  "description": "comp229 labs",
+  "description": "comp229 week2 example",
   "main": "server.js",
   "type": "module",
   "scripts": {
